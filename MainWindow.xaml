@@ -1,0 +1,32 @@
+﻿<Window x:Class="httptool.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="HttpTestTool" WindowState="Maximized" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.Resources>
+
+        </Grid.Resources>
+        <DockPanel LastChildFill="True">
+            <StackPanel DockPanel.Dock="Top" Height="35">
+                <DockPanel LastChildFill="True">
+                    <TextBlock>URL:</TextBlock>
+                    <TextBox></TextBox>
+                </DockPanel>
+                <DockPanel LastChildFill="True">
+                    <TextBlock>Body:</TextBlock>
+                    <TextBox ScrollViewer.VerticalScrollBarVisibility="Auto"></TextBox>
+                </DockPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="Post" Click="Post_Click"/>
+                    <Button Content="Put" Click="Put_Click"/>
+                    <Button Content="Del" Click="Del_Click"/>
+                    <Button Content="Get" Click="Get_Click"/>
+                </StackPanel>
+            </StackPanel>
+            <DockPanel LastChildFill="True">
+                <TextBlock>Response:</TextBlock>
+                <TextBox ScrollViewer.VerticalScrollBarVisibility="Auto"></TextBox>
+            </DockPanel>
+        </DockPanel>
+    </Grid>
+</Window>
