@@ -4,29 +4,65 @@
         Title="HttpTestTool" WindowState="Maximized" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.Resources>
-
+            <Style TargetType="TextBox">
+                <Setter Property="Margin" Value="5"></Setter>
+                <Setter Property="FontSize" Value="14"></Setter>
+                <Setter Property="AcceptsReturn" Value="True"></Setter>
+                <Setter Property="TextWrapping" Value="Wrap"></Setter>
+            </Style>
+            <Style TargetType="TextBlock">
+                <Setter Property="Margin" Value="5"></Setter>
+                <Setter Property="FontSize" Value="14"></Setter>
+            </Style>
+            <Style TargetType="Button">
+                <Setter Property="Height" Value="50"></Setter>
+                <Setter Property="Width" Value="80"></Setter>
+                <Setter Property="Margin" Value="5,0"></Setter>
+                <Setter Property="HorizontalAlignment" Value="Right"></Setter>
+            </Style>
         </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="60"></RowDefinition>
+        </Grid.RowDefinitions>
         <DockPanel LastChildFill="True">
-            <StackPanel DockPanel.Dock="Top" Height="35">
+            <StackPanel DockPanel.Dock="Top">
+                <TextBlock>URL:</TextBlock>
                 <DockPanel LastChildFill="True">
-                    <TextBlock>URL:</TextBlock>
-                    <TextBox></TextBox>
+                    <Button Content="Add" DockPanel.Dock="Right" Click="AddUrl_Click"/>
+                    <TextBox x:Name="TBUrl" FontStyle="Italic" Foreground="Gray" VerticalContentAlignment="Center"
+                                    ScrollViewer.VerticalScrollBarVisibility="Auto" Height="50"
+                                    GotFocus="TBUrl_GotFocus" Text="{Binding UrlContent[0]}">
+                    </TextBox>
                 </DockPanel>
-                <DockPanel LastChildFill="True">
-                    <TextBlock>Body:</TextBlock>
-                    <TextBox ScrollViewer.VerticalScrollBarVisibility="Auto"></TextBox>
-                </DockPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Button Content="Post" Click="Post_Click"/>
-                    <Button Content="Put" Click="Put_Click"/>
-                    <Button Content="Del" Click="Del_Click"/>
-                    <Button Content="Get" Click="Get_Click"/>
-                </StackPanel>
             </StackPanel>
+            
+            <StackPanel DockPanel.Dock="Top">
+                <TextBlock>exec command:</TextBlock>
+                <ComboBox x:Name="CBUrl" 
+                          SelectedIndex="0"
+                          ItemsSource="{Binding UrlContent}">
+                </ComboBox>
+            </StackPanel>
+
+            <StackPanel DockPanel.Dock="Top">
+                <TextBlock>Body:</TextBlock>
+                <TextBox x:Name="TBBody" FontStyle="Italic" Foreground="Gray" 
+                                    ScrollViewer.VerticalScrollBarVisibility="Auto" Height="120"
+                                    GotFocus="TBBody_GotFocus" Text="{Binding BodyContent}">
+                </TextBox>
+            </StackPanel>
+
             <DockPanel LastChildFill="True">
-                <TextBlock>Response:</TextBlock>
-                <TextBox ScrollViewer.VerticalScrollBarVisibility="Auto"></TextBox>
+                <TextBlock DockPanel.Dock="Top">Response:</TextBlock>
+                <TextBox x:Name="TBResponse" ScrollViewer.VerticalScrollBarVisibility="Auto" Text="{Binding ResponeContent}"></TextBox>
             </DockPanel>
         </DockPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right">
+            <Button Content="Post" Click="Post_Click"/>
+            <Button Content="Put" Click="Put_Click"/>
+            <Button Content="Del" Click="Del_Click"/>
+            <Button Content="Get" Click="Get_Click"/>
+        </StackPanel>
     </Grid>
 </Window>
