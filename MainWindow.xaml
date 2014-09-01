@@ -24,25 +24,30 @@
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
             <RowDefinition Height="60"></RowDefinition>
+            <RowDefinition Height="80"></RowDefinition>
         </Grid.RowDefinitions>
         <DockPanel LastChildFill="True">
-            <StackPanel DockPanel.Dock="Top">
-                <TextBlock>URL:</TextBlock>
+             <StackPanel DockPanel.Dock="Top">
+                <TextBlock>Url:</TextBlock>
                 <DockPanel LastChildFill="True">
-                    <Button Content="Add" DockPanel.Dock="Right" Click="AddUrl_Click"/>
-                    <TextBox x:Name="TBUrl" FontStyle="Italic" Foreground="Gray" VerticalContentAlignment="Center"
-                                    ScrollViewer.VerticalScrollBarVisibility="Auto" Height="50"
-                                    GotFocus="TBUrl_GotFocus" Text="{Binding UrlContent[0]}">
-                    </TextBox>
-                </DockPanel>
-            </StackPanel>
-            
-            <StackPanel DockPanel.Dock="Top">
-                <TextBlock>exec command:</TextBlock>
-                <ComboBox x:Name="CBUrl" 
-                          SelectedIndex="0"
+                    <Button DockPanel.Dock="Right" 
+                            Cursor="Hand" Click="DelUrl_Click" Width="35" Height="35">
+                        <Button.Background>
+                            <ImageBrush ImageSource="Images/delete.png"></ImageBrush>
+                        </Button.Background>
+                    </Button>
+                    <Button DockPanel.Dock="Right" Cursor="Hand" 
+                            Click="AddUrl_Click" Width="35" Height="35">
+                        <Button.Background>
+                            <ImageBrush ImageSource="Images/add.png"></ImageBrush>
+                        </Button.Background>
+                    </Button>
+                    <ComboBox x:Name="CBUrl" IsEditable="True" IsTextSearchEnabled="True"
+                              Margin="5,0" FontSize="14" GotFocus="CBUrl_GotFocus"
+                          SelectedIndex="0" FontStyle="Italic" Foreground="Gray" VerticalContentAlignment="Center"
                           ItemsSource="{Binding UrlContent}">
-                </ComboBox>
+                    </ComboBox>
+                </DockPanel>
             </StackPanel>
 
             <StackPanel DockPanel.Dock="Top">
@@ -58,11 +63,22 @@
                 <TextBox x:Name="TBResponse" ScrollViewer.VerticalScrollBarVisibility="Auto" Text="{Binding ResponeContent}"></TextBox>
             </DockPanel>
         </DockPanel>
-        <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right">
+        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right">
             <Button Content="Post" Click="Post_Click"/>
             <Button Content="Put" Click="Put_Click"/>
             <Button Content="Del" Click="Del_Click"/>
             <Button Content="Get" Click="Get_Click"/>
+        </StackPanel>
+        <StackPanel Grid.Row="2">
+            <TextBlock HorizontalAlignment="Center" Margin="0,5,0,0" VerticalAlignment="Center">Copyright©2014 Power By <Hyperlink NavigateUri="http://tommyknight.cn" 
+                           RequestNavigate="Hyperlink_RequestNavigate" >TommyKnight</Hyperlink></TextBlock>
+            <TextBlock HorizontalAlignment="Center">
+                <Hyperlink NavigateUri="https://github.com/tommywu23/httptool.git" 
+                           RequestNavigate="Hyperlink_RequestNavigate"
+                           OverridesDefaultStyle="True">
+                    <Image VerticalAlignment="Center" Cursor="Hand" Height="35" Width="35" Source="Images/github-mark.png" ></Image>
+                </Hyperlink>
+            </TextBlock>
         </StackPanel>
     </Grid>
 </Window>

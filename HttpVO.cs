@@ -1,16 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
 namespace httptool {
-	public class HttpVO : DependencyObject {
+	public class HttpVO : DependencyObject, INotifyPropertyChanged {
+		public event PropertyChangedEventHandler PropertyChanged;
+
 		public ObservableCollection<string> UrlContent {
 			get { return (ObservableCollection<string>)GetValue(UrlContentProperty); }
-			set { SetValue(UrlContentProperty, value); }
+			set { 
+				SetValue(UrlContentProperty, value);
+			}
 		}
 
 		public string BodyContent {
@@ -21,6 +26,12 @@ namespace httptool {
 		public string ResponeContent {
 			get { return (string)GetValue(ResponeContentProperty); }
 			set { SetValue(ResponeContentProperty, value); }
+		}
+
+		public void NotifyPropertyChanged(string propertyName) {
+			if (PropertyChanged != null) {
+				PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
 		}
 
 		public static readonly DependencyProperty UrlContentProperty =

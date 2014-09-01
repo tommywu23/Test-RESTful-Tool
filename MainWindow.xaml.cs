@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -62,13 +63,30 @@ namespace httptool {
 			AppManager.Instance.ClearBody();
 		}
 
-		private void Button_Click(object sender, RoutedEventArgs e) {
-			
+		private void CBUrl_GotFocus(object sender, RoutedEventArgs e) {
+			SetNormalTextStyle(sender as Control);
+			AppManager.Instance.ClearUrl();
 		}
 
 		private void AddUrl_Click(object sender, RoutedEventArgs e) {
-			var url = TBUrl.Text;
-			//Regex r = new Regex(@"\D");
+			var url = CBUrl.Text;
+
+			if (r.IsMatch(url)) {
+				AppManager.Instance.AddExec(url);
+			} else {
+				MessageBox.Show("输入字符无效");
+			}
 		}
+
+		private void DelUrl_Click(object sender, RoutedEventArgs e) {
+			AppManager.Instance.ClearExec();
+		}
+
+		private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e) {
+			Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+			e.Handled = true;
+		}
+
+		private Regex r = new Regex(@"^(http)\://([a-zA-Z0-9\.\-]+(\:[a-zA-Z0-9\.&amp;%\$\-]+)*@)?((25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])|([a-zA-Z0-9\-]+\.)*[a-zA-Z0-9\-]+\.[a-zA-Z]{2,4})(\:[0-9]+)?(/[^/][a-zA-Z0-9\.\,\?\'\\/\+&amp;%\$#\=~_\-@]*)*$");
 	}
 }

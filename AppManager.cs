@@ -40,6 +40,15 @@ namespace httptool {
 			content.ResponeContent = data;
 		}
 
+		internal void ClearExec() {
+			content.UrlContent.Clear();
+			content.UrlContent.Add(@"e.g. http://127.0.0.1:3000/status");
+		}
+
+		internal void AddExec(string url) {
+			content.UrlContent.Add(url);
+		}
+
 		private HttpVO content;
 		private static AppManager instance = new AppManager();
 	}
