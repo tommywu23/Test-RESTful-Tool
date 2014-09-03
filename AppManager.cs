@@ -21,7 +21,7 @@ namespace httptool {
 		}
 
 		AppManager() {
-			content = new HttpVO{
+			content = new HttpVO {
 				UrlContent = new ObservableCollection<string>(),
 				BodyContent = @" e.g.[{""name"":""shidiao"",""type"":""camera"",""address"":""rtsp://192.168.16.141:8554/stream.smp?address=192.168.16.214""}]"
 			};
@@ -48,12 +48,16 @@ namespace httptool {
 		}
 
 		internal void SetRes(string data) {
-			content.ResponeContent = data;
+			content.ResponeContent += string.Format("\r\n {1}--{0}", data, DateTime.Now);
 		}
 
 		internal void ClearExec() {
 			content.UrlContent.Clear();
 			content.UrlContent.Add(@"e.g. http://127.0.0.1:3000/status");
+		}
+
+		internal void ClearRes() {
+			content.ResponeContent = "";
 		}
 
 		internal void AddExec(string url) {

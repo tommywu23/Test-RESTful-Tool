@@ -34,7 +34,7 @@
             <RowDefinition Height="80"></RowDefinition>
         </Grid.RowDefinitions>
         <DockPanel LastChildFill="True">
-             <StackPanel DockPanel.Dock="Top">
+            <StackPanel DockPanel.Dock="Top">
                 <TextBlock>Url:</TextBlock>
                 <DockPanel LastChildFill="True">
                     <Button DockPanel.Dock="Right" 
@@ -73,6 +73,7 @@
 
             <DockPanel LastChildFill="True">
                 <TextBlock DockPanel.Dock="Top">Response:</TextBlock>
+                <Button HorizontalAlignment="Left" DockPanel.Dock="Top" Click="Clear_Click">清空反馈内容</Button>
                 <TextBox x:Name="TBResponse" ScrollViewer.VerticalScrollBarVisibility="Auto" Text="{Binding ResponeContent}"></TextBox>
             </DockPanel>
         </DockPanel>
