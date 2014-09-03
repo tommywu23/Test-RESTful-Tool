@@ -32,25 +32,6 @@ namespace httptool {
 			source.Foreground = Brushes.Black;
 		}
 
-		private void Request(RequestType reqtype, string url, string body = null) {
-			string data = string.Empty;
-			try {
-				if (reqtype == RequestType.Post) {
-					data = ClientHelper.Post(url, body);
-				} else if (reqtype == RequestType.Get) {
-					data = ClientHelper.Get(url);
-				} else if (reqtype == RequestType.Delete) {
-					data = ClientHelper.Delete(url, "");
-				} else if (reqtype == RequestType.Put) {
-					data = ClientHelper.Put(url, "");
-				}
-
-				AppManager.Instance.SetRes(data);
-			} catch (Exception ex) {
-				AppManager.Instance.SetRes(ex.Message);
-			}
-		}
-
 		private bool RequestURLValid(string source) {
 			if (r.IsMatch(source)) {
 				return true;
@@ -63,23 +44,37 @@ namespace httptool {
 		private void Post_Click(object sender, RoutedEventArgs e) {
 			var url = CBUrl.SelectedValue == null ? CBUrl.Text : CBUrl.SelectedValue.ToString();
 			var body = TBBody.Text;
-			if (RequestURLValid(url)) Request(RequestType.Post, url, body);
+			if (RequestURLValid(url)) {
+				var req = new HttpReqModelBuilder().Create(RequestMethod.POST, currentContentType, url, body);
+				AppManager.Instance.Request(req);
+			}
 		}
-
 
 		private void Put_Click(object sender, RoutedEventArgs e) {
 			var url = CBUrl.SelectedValue == null ? CBUrl.Text : CBUrl.SelectedValue.ToString();
-			if (RequestURLValid(url)) Request(RequestType.Put, url);
+			var body = TBBody.Text;
+			if (RequestURLValid(url)){
+				var req = new HttpReqModelBuilder().Create(RequestMethod.PUT, currentContentType, url, body);
+				AppManager.Instance.Request(req);
+			}
 		}
 
 		private void Del_Click(object sender, RoutedEventArgs e) {
 			var url = CBUrl.SelectedValue == null ? CBUrl.Text : CBUrl.SelectedValue.ToString();
-			if (RequestURLValid(url)) Request(RequestType.Delete, url);
+			var body = TBBody.Text;
+			if (RequestURLValid(url)) {
+				var req = new HttpReqModelBuilder().Create(RequestMethod.DELETE, currentContentType, url, body);
+				AppManager.Instance.Request(req);
+			}
 		}
 
 		private void Get_Click(object sender, RoutedEventArgs e) {
 			var url = CBUrl.SelectedValue == null ? CBUrl.Text : CBUrl.SelectedValue.ToString();
-			if (RequestURLValid(url)) Request(RequestType.Get, url);
+			var body = TBBody.Text;
+			if (RequestURLValid(url)) {
+				var req = new HttpReqModelBuilder().Create(RequestMethod.GET, currentContentType, url, body);
+				AppManager.Instance.Request(req);
+			}
 		}
 
 		private void TBUrl_GotFocus(object sender, RoutedEventArgs e) {
@@ -116,13 +111,13 @@ namespace httptool {
 			e.Handled = true;
 		}
 
-		private enum RequestType {
-			Put,
-			Post,
-			Get,
-			Delete
+		private void ContentType_Checked(object sender, RoutedEventArgs e) {
+			var element = (sender as RadioButton).Content;
+			if(element == null) return;
+			currentContentType = (element.ToString() == "JSON") ? ContentType.JSON : ContentType.Form;
 		}
 
 		private Regex r = new Regex(@"^(http)\://([a-zA-Z0-9\.\-]+(\:[a-zA-Z0-9\.&amp;%\$\-]+)*@)?((25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])|([a-zA-Z0-9\-]+\.)*[a-zA-Z0-9\-]+\.[a-zA-Z]{2,4})(\:[0-9]+)?(/[^/][a-zA-Z0-9\.\,\?\'\\/\+&amp;%\$#\=~_\-@]*)*$");
+		private ContentType currentContentType = ContentType.JSON;
 	}
 }

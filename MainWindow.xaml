@@ -21,6 +21,12 @@
                 <Setter Property="Margin" Value="5,0"></Setter>
                 <Setter Property="HorizontalAlignment" Value="Right"></Setter>
             </Style>
+            <Style TargetType="RadioButton">
+                <Setter Property="Height" Value="50"></Setter>
+                <Setter Property="Width" Value="80"></Setter>
+                <Setter Property="Margin" Value="5,0"></Setter>
+                <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+            </Style>
         </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
@@ -53,6 +59,12 @@
 
             <StackPanel DockPanel.Dock="Top">
                 <TextBlock>Body:</TextBlock>
+                <StackPanel Orientation="Horizontal">
+                    <Label VerticalContentAlignment="Center">Content-Type:</Label>
+                    <RadioButton GroupName="1" Checked="ContentType_Checked">Form</RadioButton>
+                    <RadioButton GroupName="1" Checked="ContentType_Checked" IsChecked="True">JSON</RadioButton>
+                </StackPanel>
+
                 <TextBox x:Name="TBBody" FontStyle="Italic" Foreground="Gray" 
                                     ScrollViewer.VerticalScrollBarVisibility="Auto" Height="120"
                                     GotFocus="TBBody_GotFocus" Text="{Binding BodyContent}">

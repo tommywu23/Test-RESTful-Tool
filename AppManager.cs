@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using httptool.Utils;
 
 namespace httptool {
 	public class AppManager {
@@ -26,6 +27,16 @@ namespace httptool {
 			};
 
 			content.UrlContent.Add(@"e.g. http://127.0.0.1:3000/status");
+		}
+
+		internal void Request(HttpReqModel req) {
+			string data = string.Empty;
+			try {
+				data = ClientHelper.Instance.HttpReq(req.Method, req.Type, req.Action, req.Content);
+				SetRes(data);
+			} catch (Exception ex) {
+				SetRes(ex.Message);
+			}
 		}
 
 		internal void ClearUrl() {

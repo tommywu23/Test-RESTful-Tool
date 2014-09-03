@@ -8,7 +8,31 @@ using System.Threading.Tasks;
 
 namespace httptool.Utils {
 	public class ClientHelper {
-		static public string GetData(HttpWebResponse resp) {
+		public static ClientHelper Instance { get { return instance; } }
+
+		public ClientHelper() {
+			contentType = new Dictionary<string, string>();
+			contentType.Add(ContentType.JSON.ToString(), "application/json; charset=utf-8");
+			contentType.Add(ContentType.Form.ToString(), "application/x-www-form-urlencoded");
+		}
+
+		public string HttpReq(RequestMethod action, ContentType reqtype, string url, string data = null) {
+			string result = string.Empty;
+
+			try {
+				using (var response = RawReq(action, reqtype, url, data)) {
+					result = GetStream(response.GetResponseStream());
+				}
+			} catch (WebException ex) {
+				throw ex;
+			} catch (Exception ex) {
+				throw ex;
+			}
+
+			return result;
+		}
+
+		public string GetData(HttpWebResponse resp) {
 			string result = string.Empty;
 			try {
 				using (Stream stream = resp.GetResponseStream()) {
@@ -25,80 +49,8 @@ namespace httptool.Utils {
 			return result;
 		}
 
-		static public string Get(string url, Dictionary<string, string> options = null) {
-			string result = string.Empty;
-			try {
-				using (var response = RawGet(url, options)) {
-					using (var stream = response.GetResponseStream()) {
-						using (var reader = new StreamReader(stream)) {
-							result = reader.ReadToEnd();
-						}
-					}
-				}
-			} catch (WebException ex) {
-				throw ex;
-			} catch (Exception ex) {
-				throw ex;
-			}
-			return result;
-		}
-
-		static public string Post(string url, string data, Dictionary<string, string> options = null) {
-			string result = string.Empty;
-			try {
-				using (var response = RawPost(url, data, options)) {
-					using (var stream = response.GetResponseStream()) {
-						using (var reader = new StreamReader(stream)) {
-							result = reader.ReadToEnd();
-						}
-					}
-				}
-			} catch (WebException ex) {
-				throw ex;
-			} catch (Exception ex) {
-				throw ex;
-			}
-			return result;
-		}
-
-		static public string Put(string url, string data, Dictionary<string, string> options = null) {
-			string result = string.Empty;
-			try {
-				using (var response = RawPut(url, data, options)) {
-					using (var stream = response.GetResponseStream()) {
-						using (var reader = new StreamReader(stream)) {
-							result = reader.ReadToEnd();
-						}
-					}
-				}
-			} catch (WebException ex) {
-				throw ex;
-			} catch (Exception ex) {
-				throw ex;
-			}
-			return result;
-		}
-
-		static public string Delete(string url,string data, Dictionary<string, string> options = null) {
-			string result = string.Empty;
-			try {
-				using (var response = RawDELETE(url, data, options)) {
-					using (var stream = response.GetResponseStream()) {
-						using (var reader = new StreamReader(stream)) {
-							result = reader.ReadToEnd();
-						}
-					}
-				}
-			} catch (WebException ex) {
-				throw ex;
-			} catch (Exception ex) {
-				throw ex;
-			}
-			return result;
-		}
-
 		// close response by client
-		static private HttpWebResponse RawGet(string url, Dictionary<string, string> options = null) {
+		private HttpWebResponse RawGet(string url, Dictionary<string, string> options = null) {
 			HttpWebResponse result = null;
 			var request = HttpWebRequest.Create(url) as HttpWebRequest;
 			request.Method = "GET";
@@ -114,18 +66,17 @@ namespace httptool.Utils {
 			return result;
 		}
 
-		// close response by client
-		static private HttpWebResponse RawPost(string url, string data, Dictionary<string, string> options = null) {
+		private HttpWebResponse RawReq(RequestMethod action, ContentType reqtype, string url, string data = null) {
 			byte[] buffer = Encoding.UTF8.GetBytes(data);
 
 			HttpWebResponse result = null;
 			var request = HttpWebRequest.Create(url) as HttpWebRequest;
-			request.Method = "POST";
-			// request.Timeout = 500;
-			request.ContentType = "application/x-www-form-urlencoded";
+			request.Method = action.ToString();
+			request.ContentType = contentType[reqtype.ToString()];
 			request.ContentLength = buffer.Length;
+
 			try {
-				request.GetRequestStream().Write(buffer, 0, buffer.Length);
+				if (buffer.Length > 0) request.GetRequestStream().Write(buffer, 0, buffer.Length);
 				result = request.GetResponse() as HttpWebResponse;
 			} catch (WebException ex) {
 				throw ex;
@@ -135,63 +86,29 @@ namespace httptool.Utils {
 			return result;
 		}
 
-		static private HttpWebResponse RawPut(string url, string data, Dictionary<string, string> options) {
-			byte[] buffer = Encoding.UTF8.GetBytes(data);
-
-			HttpWebResponse result = null;
-			var request = HttpWebRequest.Create(url) as HttpWebRequest;
-			request.Method = "PUT";
-			request.ContentType = "application/x-www-form-urlencoded";
-			request.ContentLength = buffer.Length;
-			try {
-				request.GetRequestStream().Write(buffer, 0, buffer.Length);
-				result = request.GetResponse() as HttpWebResponse;
-			} catch (WebException ex) {
-				throw ex;
-			} catch (Exception ex) {
-				throw ex;
+		private string GetStream(Stream source) {
+			string result = string.Empty;
+			using (var stream = source) {
+				using (var reader = new StreamReader(stream)) {
+					result = reader.ReadToEnd();
+				}
 			}
 			return result;
 		}
 
-		static private HttpWebResponse RawDELETE(string url, string data, Dictionary<string, string> options) {
-			byte[] buffer = Encoding.UTF8.GetBytes(data);
+		private static Dictionary<string, string> contentType;
+		private static ClientHelper instance = new ClientHelper();
+	}
 
-			HttpWebResponse result = null;
-			var request = HttpWebRequest.Create(url) as HttpWebRequest;
-			request.Method = "DELETE";
-			request.ContentType = "application/x-www-form-urlencoded";
-			request.ContentLength = buffer.Length;
-			try {
-				request.GetRequestStream().Write(buffer, 0, buffer.Length);
-				result = request.GetResponse() as HttpWebResponse;
-			} catch (WebException ex) {
-				throw ex;
-			} catch (Exception ex) {
-				throw ex;
-			}
-			return result;
-		}
+	public enum RequestMethod {
+		PUT,
+		POST,
+		GET,
+		DELETE
+	}
 
-		static public HttpWebResponse RawPostByJson(string url, string data, Dictionary<string, string> options = null) {
-			byte[] buffer = Encoding.UTF8.GetBytes(data);
-
-			HttpWebResponse result = null;
-			var request = HttpWebRequest.Create(url) as HttpWebRequest;
-			request.Method = "POST";
-			// request.Timeout = 500;
-			request.ContentType = "application/json; charset=utf-8";
-			request.ContentLength = buffer.Length;
-
-			try {
-				request.GetRequestStream().Write(buffer, 0, buffer.Length);
-				result = request.GetResponse() as HttpWebResponse;
-			} catch (WebException ex) {
-				throw ex;
-			} catch (Exception ex) {
-				throw ex;
-			}
-			return result;
-		}
+	public enum ContentType {
+		JSON,
+		Form
 	}
 }

@@ -6,8 +6,32 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using httptool.Utils;
 
 namespace httptool {
+	public class HttpReqModel {
+		public RequestMethod Method { get; set; }
+
+		public ContentType Type { get; set; }
+
+		public string Action { get; set; }
+
+		public string Content { get; set; }
+	}
+
+	public class HttpReqModelBuilder {
+		public HttpReqModel Create(RequestMethod method, ContentType type, string action, string content) {
+			var result = new HttpReqModel(){
+				Action = action,
+				Content = content,
+				Method = method,
+				Type = type
+			};
+
+			return result;
+		}
+	}
+
 	public class HttpVO : DependencyObject, INotifyPropertyChanged {
 		public event PropertyChangedEventHandler PropertyChanged;
 
