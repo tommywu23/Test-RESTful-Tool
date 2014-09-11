@@ -43,7 +43,7 @@ namespace httptool {
 
 		private void Post_Click(object sender, RoutedEventArgs e) {
 			var url = CBUrl.SelectedValue == null ? CBUrl.Text : CBUrl.SelectedValue.ToString();
-			var body = TBBody.Text;
+			var body = TBBody.Text.Contains("e.g.") ? "" : TBBody.Text;
 			if (RequestURLValid(url)) {
 				var req = new HttpReqModelBuilder().Create(RequestMethod.POST, currentContentType, url, body);
 				AppManager.Instance.Request(req);
@@ -52,7 +52,7 @@ namespace httptool {
 
 		private void Put_Click(object sender, RoutedEventArgs e) {
 			var url = CBUrl.SelectedValue == null ? CBUrl.Text : CBUrl.SelectedValue.ToString();
-			var body = TBBody.Text;
+			var body = TBBody.Text.Contains("e.g.") ? "" : TBBody.Text;
 			if (RequestURLValid(url)){
 				var req = new HttpReqModelBuilder().Create(RequestMethod.PUT, currentContentType, url, body);
 				AppManager.Instance.Request(req);
@@ -61,7 +61,7 @@ namespace httptool {
 
 		private void Del_Click(object sender, RoutedEventArgs e) {
 			var url = CBUrl.SelectedValue == null ? CBUrl.Text : CBUrl.SelectedValue.ToString();
-			var body = TBBody.Text;
+			var body = TBBody.Text.Contains("e.g.") ? "" : TBBody.Text;
 			if (RequestURLValid(url)) {
 				var req = new HttpReqModelBuilder().Create(RequestMethod.DELETE, currentContentType, url, body);
 				AppManager.Instance.Request(req);
@@ -70,7 +70,7 @@ namespace httptool {
 
 		private void Get_Click(object sender, RoutedEventArgs e) {
 			var url = CBUrl.SelectedValue == null ? CBUrl.Text : CBUrl.SelectedValue.ToString();
-			var body = TBBody.Text;
+			var body = TBBody.Text.Contains("e.g.") ? "" : TBBody.Text;
 			if (RequestURLValid(url)) {
 				var req = new HttpReqModelBuilder().Create(RequestMethod.GET, currentContentType, url, body);
 				AppManager.Instance.Request(req);

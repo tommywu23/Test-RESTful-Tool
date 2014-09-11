@@ -48,7 +48,7 @@ namespace httptool {
 		}
 
 		internal void SetRes(string data) {
-			content.ResponeContent += string.Format("\r\n {1}--{0}", data, DateTime.Now);
+			content.ResponeContent = content.ResponeContent.Insert(0, string.Format("\r\n {1}--{0}", data, DateTime.Now));
 		}
 
 		internal void ClearExec() {
